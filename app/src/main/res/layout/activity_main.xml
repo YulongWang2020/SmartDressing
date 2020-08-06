@@ -37,6 +37,7 @@
             android:layout_marginEnd="30dp"
             android:layout_weight="1"
             android:backgroundTint="#00AAF6"
+            android:ellipsize="none"
             android:text="注册"
             android:textColor="#FFFFFF" />
     </LinearLayout>
