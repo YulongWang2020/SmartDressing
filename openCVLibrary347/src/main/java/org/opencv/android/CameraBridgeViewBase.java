@@ -427,18 +427,18 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
                          (canvas.getHeight() - mCacheBitmap.getHeight()) / 2 + mCacheBitmap.getHeight()), null);
                 }
                 /*----------------------------修改预览旋转90度问题--------------------------------*/
-                canvas.rotate(90,0,0);
-
-
-                float scale= canvas.getWidth() / (float)mCacheBitmap.getHeight();
-                float scale2= canvas.getHeight() / (float)mCacheBitmap.getWidth();
-                if(scale2> scale){
-                    scale = scale2;
-                }
-                if (scale!= 0) {
-                    canvas.scale(scale,scale,0,0);
-                }
-                canvas.drawBitmap(mCacheBitmap, 0, -mCacheBitmap.getHeight(), null);
+//                canvas.rotate(90,0,0);
+//
+//
+//                float scale= canvas.getWidth() / (float)mCacheBitmap.getHeight();
+//                float scale2= canvas.getHeight() / (float)mCacheBitmap.getWidth();
+//                if(scale2> scale){
+//                    scale = scale2;
+//                }
+//                if (scale!= 0) {
+//                    canvas.scale(scale,scale,0,0);
+//                }
+//                canvas.drawBitmap(mCacheBitmap, 0, -mCacheBitmap.getHeight(), null);
 
 
                 /*----------------------------修改预览旋转90度问题--------------------------------*/

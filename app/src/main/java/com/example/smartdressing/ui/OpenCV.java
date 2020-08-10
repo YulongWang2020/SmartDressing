@@ -1,4 +1,4 @@
-package com.example.smartdressing;
+package com.example.smartdressing.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+
+
+import com.example.smartdressing.R;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -15,12 +20,14 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.*;
+import org.opencv.core.MatOfDouble;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.objdetect.HOGDescriptor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +50,9 @@ public class OpenCV extends AppCompatActivity implements CameraBridgeViewBase.Cv
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_c_v);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
 
         cameraBridgeViewBase = (JavaCameraView)findViewById(R.id.OpenCVCamera);
         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
@@ -103,18 +113,37 @@ public class OpenCV extends AppCompatActivity implements CameraBridgeViewBase.Cv
         mRgba = inputFrame.rgba();
         mGray = inputFrame.gray();
 
-        // body detector
 
-        MatOfRect bodydetection = new MatOfRect();
-        fullbody.detectMultiScale(mRgba,bodydetection);
-        System.out.println("-------------------------------------------------------------");
-        System.out.println(bodydetection.toArray());
-        System.out.println("-------------------------------------------------------------");
-        for(Rect rect: bodydetection.toArray()){
-            Imgproc.rectangle(mRgba,new Point(rect.x,rect.y),
-                    new Point(rect.x +rect.width,rect.y+rect.height),
-                    new Scalar(255,0,0));
+        /////////////////////
+        HOGDescriptor hog =  new HOGDescriptor();
+        hog.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
+        MatOfRect fullbody = new MatOfRect();
+        MatOfDouble fullbodyscale = new MatOfDouble();
+        Rect rect;
+        hog.detectMultiScale(mGray, fullbody, fullbodyscale);
+        for(Rect rects: fullbody.toArray()){
+            System.out.println(rects.x +"--------------" + rects.y);
+
+
+            Imgproc.rectangle(mRgba,new Point(rects.x,rects.y),
+                    new Point(rects.x +rects.width,rects.y+rects.height),
+                    new Scalar(0,255,0));
         }
+
+//        /////////////////////
+//
+//        // body detector
+//
+////        MatOfRect bodydetection = new MatOfRect();
+//////        fullbody.detectMultiScale(mRgba,bodydetection);
+//////        System.out.println("-------------------------------------------------------------");
+//////        System.out.println(bodydetection.toArray());
+//////        System.out.println("-------------------------------------------------------------");
+//////        for(Rect rect: bodydetection.toArray()){
+//////            Imgproc.rectangle(mRgba,new Point(rect.x,rect.y),
+//////                    new Point(rect.x +rect.width,rect.y+rect.height),
+//////                    new Scalar(255,0,0));
+//////        }
         Core.flip(mRgba,mRgba,1);
         return mRgba;
     }

@@ -19,13 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OpenCV" />
-        <activity android:name=".IfStartCamera" />
-        <activity android:name=".RegisterProgress" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.OpenCV" />
+        <activity android:name=".ui.IfStartCamera" />
+        <activity android:name=".ui.RegisterProgress" />
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
