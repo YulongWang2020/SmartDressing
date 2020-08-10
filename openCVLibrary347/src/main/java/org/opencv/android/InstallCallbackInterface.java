@@ -1,5 +1,7 @@
 package org.opencv.android;
 
+import java.io.IOException;
+
 /**
  * Installation callback interface.
  */
@@ -22,13 +24,13 @@ public interface InstallCallbackInterface
     /**
      * Installation is approved.
      */
-    public void install();
+    public void install() throws IOException;
     /**
      * Installation is canceled.
      */
-    public void cancel();
+    public void cancel() throws IOException;
     /**
      * Wait for package installation.
      */
-    public void wait_install();
+    public void wait_install() throws IOException;
 };

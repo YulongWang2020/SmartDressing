@@ -1,5 +1,8 @@
 package org.opencv.android;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Interface for callback object in case of asynchronous initialization of OpenCV.
  */
@@ -30,7 +33,7 @@ public interface LoaderCallbackInterface
      * Callback method, called after OpenCV library initialization.
      * @param status status of initialization (see initialization status constants).
      */
-    public void onManagerConnected(int status);
+    public void onManagerConnected(int status) throws IOException;
 
     /**
      * Callback method, called in case the package installation is needed.

@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Basic implementation of LoaderCallbackInterface.
  */
@@ -16,8 +19,7 @@ public abstract class BaseLoaderCallback implements LoaderCallbackInterface {
         mAppContext = AppContext;
     }
 
-    public void onManagerConnected(int status)
-    {
+    public void onManagerConnected(int status) throws IOException {
         switch (status)
         {
             /** OpenCV initialization was successful. **/
@@ -95,7 +97,11 @@ public abstract class BaseLoaderCallback implements LoaderCallbackInterface {
                 {
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        callback.install();
+                        try {
+                            callback.install();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -103,7 +109,11 @@ public abstract class BaseLoaderCallback implements LoaderCallbackInterface {
 
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        callback.cancel();
+                        try {
+                            callback.cancel();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -117,12 +127,20 @@ public abstract class BaseLoaderCallback implements LoaderCallbackInterface {
                 WaitMessage.setCancelable(false); // This blocks the 'BACK' button
                 WaitMessage.setButton(AlertDialog.BUTTON_POSITIVE, "Wait", new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        callback.wait_install();
+                        try {
+                            callback.wait_install();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 WaitMessage.setButton(AlertDialog.BUTTON_NEGATIVE, "Exit", new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        callback.cancel();
+                        try {
+                            callback.cancel();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 

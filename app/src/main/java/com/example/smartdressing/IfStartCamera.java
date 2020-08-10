@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-
 public class IfStartCamera extends AppCompatActivity {
     private Button mBtnCamera;
+    private Button mBtnJump;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,18 @@ public class IfStartCamera extends AppCompatActivity {
         mBtnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(IfStartCamera.this, OpenCV.class);
+                startActivity(intent);
+            }
+        });
+
+
+        mBtnJump = findViewById(R.id.ifstartcamera_jump);
+        mBtnJump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+
                 Intent intent = new Intent(IfStartCamera.this, OpenCV.class);
                 startActivity(intent);
             }

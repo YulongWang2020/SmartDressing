@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.hardware.camera2.full" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION."/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -14,8 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OpenCV"></activity>
-        <activity android:name=".Camera" />
+        <activity android:name=".OpenCV" />
         <activity android:name=".IfStartCamera" />
         <activity android:name=".RegisterProgress" />
         <activity android:name=".MainActivity">
@@ -25,6 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
