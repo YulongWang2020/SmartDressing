@@ -12,10 +12,9 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99">
+        app:layout_constraintVertical_bias="0.427">
 
         <TextView
             android:id="@+id/textView"
@@ -37,6 +36,22 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="用户名"
+            android:textColor="#03a9f4" />
+
+        <EditText
+            android:id="@+id/editTextTextUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="请输入用户名"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:text="密码"
             android:textColor="#03A9F4" />
 
@@ -56,13 +71,14 @@
             android:hint="请再次输入密码"
             android:inputType="textPassword" />
 
+
         <Button
             android:id="@+id/register_next"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="250dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="#03A9F4"
             android:text="下一步" />
