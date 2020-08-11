@@ -3,7 +3,9 @@ package com.example.smartdressing.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
@@ -102,6 +104,20 @@ public class OpenCV extends AppCompatActivity implements CameraBridgeViewBase.Cv
     }
 
 
+    /////////////////////////////////////////////////////////////
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+
+    /////////////////////////////////////////////////////////////
+
 
 
 
@@ -131,19 +147,19 @@ public class OpenCV extends AppCompatActivity implements CameraBridgeViewBase.Cv
         }
 
 //        /////////////////////
-//
-//        // body detector
-//
-////        MatOfRect bodydetection = new MatOfRect();
-//////        fullbody.detectMultiScale(mRgba,bodydetection);
-//////        System.out.println("-------------------------------------------------------------");
-//////        System.out.println(bodydetection.toArray());
-//////        System.out.println("-------------------------------------------------------------");
-//////        for(Rect rect: bodydetection.toArray()){
-//////            Imgproc.rectangle(mRgba,new Point(rect.x,rect.y),
-//////                    new Point(rect.x +rect.width,rect.y+rect.height),
-//////                    new Scalar(255,0,0));
-//////        }
+////
+////        // body detector
+////
+//////        MatOfRect bodydetection = new MatOfRect();
+////////        fullbody.detectMultiScale(mRgba,bodydetection);
+////////        System.out.println("-------------------------------------------------------------");
+////////        System.out.println(bodydetection.toArray());
+////////        System.out.println("-------------------------------------------------------------");
+////////        for(Rect rect: bodydetection.toArray()){
+////////            Imgproc.rectangle(mRgba,new Point(rect.x,rect.y),
+////////                    new Point(rect.x +rect.width,rect.y+rect.height),
+////////                    new Scalar(255,0,0));
+////////        }
         Core.flip(mRgba,mRgba,1);
         return mRgba;
     }

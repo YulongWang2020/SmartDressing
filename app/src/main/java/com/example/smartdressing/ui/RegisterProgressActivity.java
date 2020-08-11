@@ -2,6 +2,7 @@ package com.example.smartdressing.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,11 +36,29 @@ public class RegisterProgressActivity extends AppCompatActivity {
     private EditText mEditTextTextPassword2;
     private EditText mEditTextTextUsername;
 
+    /**
+    临时代码
+
+    */
+
+    private Button mbtntestButton;
+
+    ////////////////////////////
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_progress);
-
+        /////////////
+        mbtntestButton = findViewById(R.id.testbutton);
+        mbtntestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterProgressActivity.this, Camera.class);
+                startActivity(intent);
+            }
+        });
+        /////////////
 
         initViews();
     }

@@ -83,5 +83,11 @@
             android:backgroundTint="#03A9F4"
             android:text="下一步" />
 
+        <Button
+            android:id="@+id/testbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试按钮，跳过" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
