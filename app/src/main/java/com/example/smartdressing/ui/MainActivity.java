@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 跳转到登录界面
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
 
         });
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 跳转到注册界面
-                Intent intent = new Intent(MainActivity.this, RegisterProgress.class);
+                Intent intent = new Intent(MainActivity.this, RegisterProgressActivity.class);
                 startActivity(intent);
             }
 
