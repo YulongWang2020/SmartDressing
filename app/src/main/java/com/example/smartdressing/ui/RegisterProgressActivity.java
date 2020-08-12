@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -35,6 +39,8 @@ public class RegisterProgressActivity extends AppCompatActivity {
     private EditText mEditTextTextPassword1;
     private EditText mEditTextTextPassword2;
     private EditText mEditTextTextUsername;
+
+    String result = "";
 
     /**
     临时代码
@@ -82,17 +88,28 @@ public class RegisterProgressActivity extends AppCompatActivity {
         mEditTextTextPassword2.setImeOptions(EditorInfo.IME_ACTION_DONE);
         mEditTextTextPassword2.setImeOptions(EditorInfo.IME_ACTION_GO);
         //手机键盘事件监听
-        mEditTextTextPassword2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//        mEditTextTextPassword2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO){
+//                    try {
+//                        commit();
+//                    }catch (IOException | JSONException e1){
+//                        e1.printStackTrace();
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+
+        mBtnRegisterNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO){
-                    try {
-                        commit();
-                    }catch (IOException | JSONException e1){
-                        e1.printStackTrace();
-                    }
+            public void onClick(View view) {
+                try{
+                    commit();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                return false;
             }
         });
     }
@@ -110,21 +127,45 @@ public class RegisterProgressActivity extends AppCompatActivity {
         Log.d("email", email);
 
         if(checkInput(email, password1, password2,username)){
-            mBtnRegisterNext.setOnClickListener(new View.OnClickListener() {
+            final Handler handler= new Handler(){
                 @Override
-                public void onClick(View view) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Register(email, password1, username);
-                            }catch (IOException|JSONException e){
-                                e.printStackTrace();
-                            }
+              public void handleMessage(Message msg){
+                  if(msg.what == 1){
+                        ToastUtils.showShort(RegisterProgressActivity.this, result);
+
+                        //根据注册返回结果来决定是否跳转
+                        if(result.equals("1")){
+                            ToastUtils.showShort(RegisterProgressActivity.this, "注册成功");
+
+                            final Intent it = new Intent(RegisterProgressActivity.this, LoginActivity.class);
+                            Timer timer = new Timer();
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    startActivity(it); //执行
+                                }
+                            };
+                            timer.schedule(task, 1000); //1秒后
+                        }else{
+                            ToastUtils.showShort(RegisterProgressActivity.this, "注册失败");
                         }
-                    }).start();
+                  }
+              }
+            };
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Register(email, password1, username);
+                    }catch (IOException|JSONException e){
+                        e.printStackTrace();
+                    }
+                    Message m = new Message();
+                    m.what = 1;
+                    handler.sendMessage(m);
                 }
-            });
+            }).start();
         }
     }
 
@@ -178,28 +219,17 @@ public class RegisterProgressActivity extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://192.168.0.103:8080/user/create")
+                    .url("http://192.168.0.107:8080/user/create")
                     .post(RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
                     .build();
             Response response = client.newCall(request).execute();
             String responseData = response.body().string();
             Log.d("responseData", responseData);
+            result = responseData;
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ToastUtils.showShort(RegisterProgressActivity.this, "注册成功");
-                }
-            });
             return true;
         }catch (IOException | JSONException e){
             e.printStackTrace();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ToastUtils.showShort(RegisterProgressActivity.this, "注册失败");
-                }
-            });
         }
         return false;
     }

@@ -2,7 +2,10 @@ package com.example.smartdressing.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartdressing.R;
@@ -21,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -33,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEditTextUsername;
     private EditText mEditTextPassword;
     private Button mBtnLogin;
+
+    String result = "";
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,20 +57,16 @@ public class LoginActivity extends AppCompatActivity {
 
         mBtnLogin = findViewById(R.id.btn_login);
 
-        mEditTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mBtnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO){
-                    try {
-                        commit();
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+            public void onClick(View view) {
+                try{
+                    commit();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                return false;
             }
         });
-
     }
 
 
@@ -71,21 +75,43 @@ public class LoginActivity extends AppCompatActivity {
         final String password = mEditTextPassword.getText().toString();
 
         if(checkInput(username, password)){
-            mBtnLogin.setOnClickListener(new View.OnClickListener() {
+            final Handler handler = new Handler(){
                 @Override
-                public void onClick(View view) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Login(username, password);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
+                public void handleMessage(@NonNull Message msg) {
+                    if(msg.what == 1){
+                        ToastUtils.showShort(LoginActivity.this, result);
+
+                        if(result.equals("true")){
+                            ToastUtils.showShort(LoginActivity.this,"登录成功");
+
+                            final Intent it = new Intent(LoginActivity.this, IfStartCamera.class);
+                            Timer timer = new Timer();
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    startActivity(it);
+                                }
+                            };
+                            timer.schedule(task, 1000);
+                        }else{
+                            ToastUtils.showShort(LoginActivity.this, "登录失败");
                         }
-                    }).start();
+                    }
                 }
-            });
+            };
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Login(username, password);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    Message m = new Message();
+                    m.what = 1;
+                    handler.sendMessage(m);
+                }
+            }).start();
         }
     }
 
@@ -120,19 +146,18 @@ public class LoginActivity extends AppCompatActivity {
         try {
             FormBody.Builder params = new FormBody.Builder();
             params.add("name", username);
-
+            params.add("pwd", password);
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://192.168.0.103:8080/user/get_by_name")
+                    .url("http://192.168.0.107:8080/user/login")
                     .post(params.build())
                     .build();
             Response response = client.newCall(request).execute();
             String responseData = response.body().string();
-            JSONArray jsonArray = new JSONArray(responseData);
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            Log.d("pwd", jsonObject.getString("pwd"));
-
-        }catch (IOException | JSONException e){
+            Log.d("login_result", responseData);
+            result = responseData;
+            return true;
+        }catch (Exception e){
             e.printStackTrace();
         }
         return false;

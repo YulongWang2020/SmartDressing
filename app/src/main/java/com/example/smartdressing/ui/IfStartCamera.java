@@ -20,7 +20,7 @@ public class IfStartCamera extends AppCompatActivity {
         mBtnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IfStartCamera.this, OpenCV.class);
+                Intent intent = new Intent(IfStartCamera.this, Camera.class);
                 startActivity(intent);
             }
         });
